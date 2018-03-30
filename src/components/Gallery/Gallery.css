@@ -8,9 +8,8 @@ body {
 }
 
 .gallery{
-    width:100%;
     position: relative;
-    /*width:calc(100% - 10px);*/
+    width:calc(100% - 10px);
 }
 
 .gallery__item{

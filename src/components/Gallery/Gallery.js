@@ -5,29 +5,12 @@ import './Gallery.css';
 
 export class Gallery extends Component{
 
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         heights: [],
-    //         loading: true,
-    //         preview: false
-    //     };
-    //
-    //     // This binding is necessary to make `this` work in the callback
-    //    // this.onGalleryImageClick = this.onGalleryImageClick.bind(this);
-    //}
-
     state = {
-        //heights: [],
         loading: true,
         preview: false,
-        curImage: null,
-        //vertical: true
-
     };
 
      imagesLoaded(parentNode) {
-        //console.log("imagesLoaded is called");
         const imgElements = [...parentNode.querySelectorAll("img")];
         for (let i = 0; i < imgElements.length; i += 1) {
             const img = imgElements[i];
@@ -39,16 +22,12 @@ export class Gallery extends Component{
     }
 
     handleImageChange = () => {
-        //console.log("handleImageChange is called");
-        //console.log('this is:', this);
         this.setState({
             loading: !this.imagesLoaded(this.galleryElement)
         });
     };
 
     renderSpinner() {
-        //console.log("renderSpinner is called");
-        //console.log('this is:', this);
         if (!this.state.loading) {
             this.renderGrid();
             return null;
@@ -57,8 +36,6 @@ export class Gallery extends Component{
     }
 
     componentDidMount() {
-        //console.log("componentDidMount is called");
-        //console.log('this is:', this);
         const gallery = this.galleryElement;
         const galleryItems = gallery.getElementsByClassName('gallery__item');
         for (let i = 0; i < galleryItems.length; i++){
@@ -67,7 +44,6 @@ export class Gallery extends Component{
         }
 
         window.addEventListener("resize", this.renderGrid);
-        //window.addEventListener("orientationChange", this.handleOrientationChange);
     }
 
     componentWillUnmount(){
@@ -78,18 +54,9 @@ export class Gallery extends Component{
         }
 
         window.removeEventListener("resize", this.renderGrid);
-        //window.removeEventListener("orientationChange", this.handleOrientationChange);
     }
 
-    // handleOrientationChange = () => {
-    //     console.log("the orientation of the device is now " + window.orientation.angle);
-    //    alert("the orientation of the device is now " + window.orientation.angle);
-    //     document.getElementsByTagName('body')[0].style.backgroundColor = "red";
-    // }
-
     renderGrid() {
-        //console.log('renderGrid is called');
-        //console.log('this is:', this);
         const blocks = document.getElementsByClassName("gallery")[0].children;
         const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         let cols = 1;
@@ -132,8 +99,6 @@ export class Gallery extends Component{
     }
 
     getPrev = () => {
-        //console.log("getPrev is called");
-        //console.log('this is:', this);
         if(this.state.curImage){
             console.log('this curImage is:', this.state.curImage);
             const prevGalleryItem = this.state.curImage.parentElement.previousElementSibling;
@@ -151,8 +116,6 @@ export class Gallery extends Component{
         }
     }
     getNext = () => {
-        //console.log("getNext is called");
-        //console.log('this is:', this);
         if(this.state.curImage){
             let nextGalleryItem = this.state.curImage.parentElement.nextElementSibling;
             let nextImage;
@@ -176,10 +139,6 @@ export class Gallery extends Component{
 
 
     render (){
-        // console.log("render is called");
-        // console.log('this curImage is:', this.state.curImage);
-        //console.log('this is:', this);
-
         const imageElements = this.props.images.map((image, index) =>
             <div key={image.id} className='gallery__item'>
                 <GalleryImage image={image}/>

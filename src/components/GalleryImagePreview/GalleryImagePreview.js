@@ -15,8 +15,6 @@ export class GalleryImagePreview extends Component{
     }
 
     render (){
-        // console.log("GalleryImagePreview render is called");
-        // console.log("GalleryImagePreview currentImage is ", this.state.currentImage);
 
         let img;
         if (this.state.currentImage){
