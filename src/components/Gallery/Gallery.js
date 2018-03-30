@@ -57,7 +57,8 @@ export class Gallery extends Component{
     }
 
     renderGrid() {
-        const blocks = document.getElementsByClassName("gallery")[0].children;
+        const gallery = document.getElementsByClassName("gallery")[0];
+        const blocks = document.getElementsByClassName("gallery__item");//[0].children;
         const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         let cols = 1;
         if (width > 1500){
@@ -69,20 +70,35 @@ export class Gallery extends Component{
         } else {
             cols = 1;
         }
-        let newleft, newtop;
-        for(let i = 1; i < blocks.length; i++){
-            if (i % cols === 0) {
-                newtop = (blocks[i-cols].offsetTop + blocks[i-cols].offsetHeight);
-                blocks[i].style.top = newtop+"px";
-            } else {
-                if(blocks[i-cols]){
-                    newleft = (blocks[i-cols].offsetTop + blocks[i-cols].offsetHeight);
-                    blocks[i].style.top = newleft+"px";
-                }
-                newleft = (blocks[i-1].offsetLeft + blocks[i-1].offsetWidth);
-                blocks[i].style.left = newleft+"px";
+
+        let heights = [];
+        if (cols > 1){
+            for (let i = 0; i < cols; i++) {
+                heights.push(0);
             }
+
+            for (let block of blocks) {
+
+                /*
+                * get the shortest column
+                * get img height
+                * add img height to the shortest column height
+                * set order to img = the shortest column index + 1
+                * */
+
+
+                let shortColHeight = Math.min(...heights);
+                let shortColIndex = heights.indexOf(shortColHeight);
+                let imgHeight = block.clientHeight;
+                // heights[shortColIndex] += imgHeight;
+                heights[shortColIndex] = shortColHeight + imgHeight;
+                block.setAttribute('style', `order: ${shortColIndex + 1};`);
+            }
+
+            const longColHeight = Math.max(...heights);
+            gallery.setAttribute('style', `max-height: ${longColHeight+5}px;`);
         }
+
     }
 
     togglePreview = (e) => {
