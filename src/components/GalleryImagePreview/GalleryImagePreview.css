@@ -62,6 +62,9 @@
         right: 0;
         transform: rotateZ(90deg);
     }
+    .GalleryImagePreview__popup {
+        justify-content: center;
+    }
     .GalleryImagePreview__nav_prev{
         top: 0;
     }

@@ -1,0 +1,16 @@
+.infinite__spinner {
+    text-align: center;
+    padding: 48px;
+}
+
+@media (max-width: 767px) and (orientation:landscape){
+    .infinite {
+        display: flex;
+    }
+    .infinite__spinner {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+}

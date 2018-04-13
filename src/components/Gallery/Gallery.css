@@ -83,3 +83,18 @@ img {
         height: 100vh;
     }
 }
+
+.gallery__overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+.gallery__overlay_visible {
+    display: flex;
+    background: rgba(0, 0, 0, 0.1);
+}
+

@@ -1,16 +1,37 @@
 import React, {Component} from 'react';
 import {GalleryImage} from '../GalleryImage/GalleryImage';
 import {GalleryImagePreview} from "../GalleryImagePreview/GalleryImagePreview";
+import {ConnectedInfinite} from "../Infinite/Infinite";
+import { connect } from 'react-redux';
+import fetchImages from '../../actions/fetchImages';
 import './Gallery.css';
+
+const stateToProps = state => ({
+    images: state.gallery.images,
+    error: state.gallery.error,
+});
+
 
 export class Gallery extends Component{
 
     state = {
-        loading: true,
         preview: false,
+        loading: true,
+        gridRender: true,
+        initialSpinner: true
     };
 
-     imagesLoaded(parentNode) {
+    constructor(props) {
+        super(props);
+
+        this.fetch = this.fetch.bind(this);
+        this.addImageHandlers = this.addImageHandlers.bind(this);
+        this.handleImageChange = this.handleImageChange.bind(this);
+        this.togglePreview = this.togglePreview.bind(this);
+        this.renderGrid = this.renderGrid.bind(this);
+    }
+
+    imagesLoaded(parentNode) {
         const imgElements = [...parentNode.querySelectorAll("img")];
         for (let i = 0; i < imgElements.length; i += 1) {
             const img = imgElements[i];
@@ -20,40 +41,64 @@ export class Gallery extends Component{
         }
         return true;
     }
-
-    handleImageChange = () => {
-        this.setState({
-            loading: !this.imagesLoaded(this.galleryElement)
+    handleImageChange() {
+        if (!this.imagesLoaded(this.galleryElement)) {
+            return false;
+        }
+        this.props.dispatch({
+            type: 'GRID_RENDER_START'
         });
+        this.renderGrid();
+        document.getElementsByClassName('gallery__overlay')[0].classList.remove('gallery__overlay_visible');
+        document.getElementsByClassName('spinner')[0].classList.remove('spinner_visible');
     };
 
-    renderSpinner() {
-        if (!this.state.loading) {
-            this.renderGrid();
-            return null;
-        }
-        return <span className="spinner" />;
-    }
-
     componentDidMount() {
-        const gallery = this.galleryElement;
-        const galleryItems = gallery.getElementsByClassName('gallery__item');
-        for (let i = 0; i < galleryItems.length; i++){
-            galleryItems[i].getElementsByTagName('img')[0].addEventListener('load', this.handleImageChange);
-            galleryItems[i].getElementsByTagName('img')[0].addEventListener('click', this.togglePreview);
-        }
-
-        window.addEventListener("resize", this.renderGrid);
+        this.fetch()
+            .then(() => {
+                this.setState({
+                    loading: false,
+                });
+                this.addImageHandlers();
+                window.addEventListener("resize", this.renderGrid);
+            })
+            .catch((error) => {
+                this.setState({
+                    loading: false,
+                    error,
+                });
+            });
     }
 
-    componentWillUnmount(){
+    addImageHandlers() {
         const gallery = this.galleryElement;
         const galleryItems = gallery.getElementsByClassName('gallery__item');
         for (let i = 0; i < galleryItems.length; i++){
+
+            if(!galleryItems[i].getAttribute('style')){
+                galleryItems[i].setAttribute('style', 'opacity: 0; position: absolute;');
+            }
+
+
+            let curImage = galleryItems[i].getElementsByTagName('img')[0];
+            curImage.addEventListener('load', this.handleImageChange);
+            curImage.addEventListener('click', this.togglePreview);
+        }
+    }
+
+    fetch() {
+        return this.props.dispatch(fetchImages());
+    }
+
+
+     componentWillUnmount(){
+        const gallery = this.galleryElement;
+        const galleryItems = gallery.getElementsByClassName('gallery__item');
+        for (let i = 0; i < galleryItems.length; i++){
+            galleryItems[i].getElementsByTagName('img')[0].removeEventListener('load', this.handleImageChange);
             galleryItems[i].getElementsByTagName('img')[0].removeEventListener('click', this.togglePreview);
         }
-
-        window.removeEventListener("resize", this.renderGrid);
+         window.removeEventListener("resize", this.renderGrid);
     }
 
     renderGrid() {
@@ -99,9 +144,17 @@ export class Gallery extends Component{
             gallery.setAttribute('style', `max-height: ${longColHeight+5}px;`);
         }
 
-    }
+        for (let block of blocks) {
+            block.style.opacity = 1;
+            block.style.position = 'inherit';
+        }
+        this.props.dispatch({
+            type: 'GRID_RENDER_END'
+        });
 
-    togglePreview = (e) => {
+    }
+    //
+    togglePreview (e) {
         let curImage = this.state.curImage;
 
         if (!this.state.preview){
@@ -153,27 +206,55 @@ export class Gallery extends Component{
     }
 
 
-
     render (){
-        const imageElements = this.props.images.map((image, index) =>
-            <div key={image.id} className='gallery__item'>
-                <GalleryImage image={image}/>
-            </div>
-        );
+
+        let {error, images} = this.props,
+            loading = this.state.loading;
+
+        if (loading) {
+            return (
+                <div className="gallery__overlay gallery__overlay_visible">
+                    <div className="spinner spinner_visible"/>
+                </div>
+            );
+        }
+
+        if (error) {
+            return (
+                <div className="gallery__overlay gallery__overlay_visible">
+                    <h1>ERROR: {error.message}</h1>
+                </div>
+            );
+        }
+
+        let imageElements = '';
+        if (images && images.length) {
+            imageElements = images.map((image, index) =>
+                <div key={image.id} className='gallery__item'>
+                    <GalleryImage image={image}/>
+                </div>
+            );
+        }
 
         return (
-            <div className="gallery" ref={element => {this.galleryElement = element}}>
-                {imageElements}
-                {this.renderSpinner()}
-                {this.state.preview ?
-                    <GalleryImagePreview togglePreview={this.togglePreview} currentImage={this.state.curImage}
-                    getPrev={this.getPrev} getNext={this.getNext}
-                    /> :
-                    null
-                }
-            </div>
+            <ConnectedInfinite fetchNext={this.fetch} afterFetch={this.addImageHandlers}>
+                <div className='gallery__overlay gallery__overlay_visible'>
+                    <div className="spinner spinner_visible"/>
+                </div>
+                <div className="gallery" ref={element => {this.galleryElement = element}}>
+                    {imageElements}
+                    {this.state.preview ?
+                        <GalleryImagePreview togglePreview={this.togglePreview} currentImage={this.state.curImage}
+                                             getPrev={this.getPrev} getNext={this.getNext}
+                        /> :
+                        null
+                    }
+                </div>
 
-        )
+            </ConnectedInfinite>
+        );
     }
 }
 
+
+export const ConnectedGallery = connect(stateToProps)(Gallery);
