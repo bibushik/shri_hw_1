@@ -1,17 +1,16 @@
 import React from 'react';
-import './GalleryImage.css'
+import './GalleryImage.css';
 
-export function GalleryImage (props) {
-        if (!props){
-            return null;
-        }
-        // const imageName = props.image.filename;
-        // const imageSrc = require(`../../img/${imageName}`);
+export function GalleryImage(props) {
+  if (!props) {
+    return null;
+  }
+  // const imageName = props.image.filename;
+  // const imageSrc = require(`../../img/${imageName}`);
 
-        const imageSrc = props.image.images.original.url;
+  const imageSrc = props.image.images.original.url;
 
-        return (
-            <img src={imageSrc}/>
-        )
-
+  return (
+    <img src={imageSrc} />
+  );
 }
