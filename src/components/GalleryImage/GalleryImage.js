@@ -8,7 +8,7 @@ export function GalleryImage(props) {
   // const imageName = props.image.filename;
   // const imageSrc = require(`../../img/${imageName}`);
 
-  const imageSrc = props.image.images.original.url;
+  const imageSrc = props.image.webformatURL;
 
   return (
     <img src={imageSrc} />

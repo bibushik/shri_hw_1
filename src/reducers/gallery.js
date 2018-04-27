@@ -14,17 +14,20 @@ export const gallery = (state, action) => {
     case 'IMAGES_LOADING':
       return {
         ...state,
+        loading: true,
         gridRender: true,
       };
     case 'IMAGES_LOADED':
       return {
         ...state,
+        loading: false,
         images: state.images.concat(action.images),
         next: action.next,
       };
     case 'IMAGES_LOAD_ERROR':
       return {
         ...state,
+        loading: false,
         error: action.error,
       };
     case 'GRID_RENDER_start':
