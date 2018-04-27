@@ -17,8 +17,9 @@
     "eslint": "eslint --fix src ",
     "test": "cross-env NODE_ENV=test mocha --recursive --require ignore-styles --compilers js:babel-core/register src/**/*.spec.js",
     "test:watch": "npm test -- -w",
-    "selenium:start": "selenium-standalone:start",
-    "gemini": "selenium:start gemini test -c ./.gemini.js"
+    "selenium:install": "selenium-standalone install",
+    "selenium:start": "selenium-standalone start",
+    "gemini": "gemini test -c ./.gemini.js"
   },
   "devDependencies": {
     "chai": "^4.1.2",
