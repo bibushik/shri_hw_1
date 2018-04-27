@@ -12,7 +12,7 @@ jobs:
 #    - stage: selenium install
 #      script: npm run selenium:install
     - stage: regression testing
-      script: screen -d -m bash -c 'cd /var/run && npm run selenium:start'
+      script: screen -d -m bash -c 'cd /home/travis/build/bibushik/shri_hw_1 && npm run selenium:start'
     - stage: regression testing
       before_script: sleep 60
       script: npm run gemini
