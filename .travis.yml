@@ -5,8 +5,8 @@ node_js:
 script:
   - npm run eslint
   - npm run test
-  - selenium:install
-  - selenium:start
+  - npm run selenium:install
+  - npm run selenium:start
   - npm run gemini
   - npm run build
 
