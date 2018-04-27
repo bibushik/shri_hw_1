@@ -7,7 +7,6 @@ addons:
   browserstack:
     username: "darya40"
     access_key: "H45BXpFinyKAVfMfqawW"
-    proxyPort: "4444"
 
 jobs:
   include:
