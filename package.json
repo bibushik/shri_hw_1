@@ -15,7 +15,7 @@
     "jest": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "eslint": "eslint --fix src ",
-    "test": "cross-env NODE_ENV=test mocha --recursive --require ignore-styles --compilers js:babel-core/register src/**/*.spec.js",
+    "test": "cross-env NODE_ENV=test mocha --recursive --require ignore-styles --compilers js:babel-core/register *.spec.js",
     "test:watch": "npm test -- -w",
     "selenium:install": "selenium-standalone install",
     "selenium:start": "selenium-standalone start",
