@@ -5,17 +5,17 @@ node_js:
 
 jobs:
   include:
-    - stage: lint
-      script: npm run eslint
-    - stage: unit testing
-      script: npm run test
+#    - stage: lint
+#      script: npm run eslint
+#    - stage: unit testing
+#      script: npm run test
 #    - stage: selenium install
-#      script: npm run selenium:install
-#    - stage: regression testing
-#      script: screen -d -m bash -c 'cd /home/travis/build/bibushik/shri_hw_1 && npm run selenium:start'
-#    - stage: regression testing
-#      before_script: sleep 60
-#      script: npm run gemini
+      script: npm run selenium:install
+    - stage: regression testing
+      script: npm run selenium:start
+    - stage: regression testing
+      before_script: sleep 150
+      script: npm run gemini
 #      after_script: skip
     - stage: build
       script: npm run build
