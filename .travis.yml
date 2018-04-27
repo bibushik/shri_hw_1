@@ -9,7 +9,7 @@ jobs:
 #      script: npm run eslint
 #    - stage: unit testing
 #      script: npm run test
-#    - stage: selenium install
+    - stage: selenium install
       script: npm run selenium:install
     - stage: regression testing
       script: npm run selenium:start
