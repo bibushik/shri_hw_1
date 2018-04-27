@@ -11,6 +11,6 @@ export function GalleryImage(props) {
   const imageSrc = props.image.webformatURL;
 
   return (
-    <img src={imageSrc} />
+    <img src={imageSrc} alt=""/>
   );
 }

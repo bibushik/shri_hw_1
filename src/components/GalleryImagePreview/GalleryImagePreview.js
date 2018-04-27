@@ -19,7 +19,7 @@ export class GalleryImagePreview extends Component{
         let img;
         if (this.state.currentImage){
             img = <img className="GalleryImagePreview__img"
-                             src={this.state.currentImage.src}/>;
+                             src={this.state.currentImage.src} alt=""/>;
         }
 
 

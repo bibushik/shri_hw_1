@@ -1,5 +1,3 @@
-import images from '../galleryContent';
-
 const DEFAULT_IMAGES = [];
 
 export const gallery = (state, action) => {
