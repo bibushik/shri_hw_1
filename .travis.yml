@@ -14,7 +14,7 @@ jobs:
     - stage: regression testing
       script: npm run selenium:start
     - stage: regression testing
-      before_script: sleep 5
+      before_script: sleep 10
       script: npm run gemini
       after_script: skip
     - stage: build
