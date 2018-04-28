@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import {gallery} from './gallery';
 
-describe.only('Reducer:Gallery', function(){
+describe('Reducer:Gallery', function(){
     it('returns images (empty array), loading(false) if state is undefined', function(){
         // setup
         const state = null;
